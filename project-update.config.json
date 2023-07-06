@@ -1,0 +1,22 @@
+{
+  "npm": [".", "../delivery-note-generator"],
+  "cmake": ["../.."],
+  "vcpkg": ["../.."],
+  "custom": [
+    {
+      "file": "../../.github/workflows/default.yml",
+      "pattern": "(APPLICATION_VERSION: )\\d+\\.\\d+\\.\\d+",
+      "prefix": "$1"
+    },
+    {
+      "file": "../../sonar-project.properties",
+      "pattern": "(sonar\\.projectVersion=)\\d+\\.\\d+\\.\\d+",
+      "prefix": "$1"
+    },
+    {
+      "file": "../../tools/sonar/windows/sonar-project.properties",
+      "pattern": "(sonar\\.projectVersion=)\\d+\\.\\d+\\.\\d+",
+      "prefix": "$1"
+    }
+  ]
+}

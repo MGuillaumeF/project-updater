@@ -1,0 +1,5 @@
+[![PROJECT-UPDATER - DEFAULT](https://github.com/MGuillaumeF/project-updater/actions/workflows/default.yml/badge.svg?branch=main)](https://github.com/MGuillaumeF/project-updater/actions/workflows/default.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MGuillaumeF_project-updater&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=MGuillaumeF_project-updater)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=MGuillaumeF_project-updater&metric=coverage)](https://sonarcloud.io/summary/new_code?id=MGuillaumeF_project-updater)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=MGuillaumeF_project-updater&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=MGuillaumeF_project-updater)
+[![wakatime](https://wakatime.com/badge/user/9f76e922-98e1-4ef0-b832-f1f6bb21d4c3/project/ee3e050e-cc97-4f0d-a40f-41f043aee3aa.svg)](https://wakatime.com/badge/user/9f76e922-98e1-4ef0-b832-f1f6bb21d4c3/project/ee3e050e-cc97-4f0d-a40f-41f043aee3aa)
