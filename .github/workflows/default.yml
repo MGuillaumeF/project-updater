@@ -1,0 +1,115 @@
+name: PROJECT-UPDATER - DEFAULT
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches:
+      - main
+      - develop
+      - delivery
+
+permissions: write-all
+
+jobs:
+  clear:
+    runs-on: ubuntu-latest
+    name: A job to delete old workflow runs
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Delete workflow runs
+      uses: MajorScruffy/delete-old-workflow-runs@v0.3.0
+      with:
+        repository: MGuillaumeF/audiso
+        workflow: ".github/workflows/default.yml"
+        older-than-seconds: 86400   
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sonarcloud-analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+
+      - name: Install dependencies
+        working-directory: ${{github.workspace}}
+        run: npm install
+
+      - name: Build
+        working-directory: ${{github.workspace}}
+        run: npm run build
+
+      # - name: Tests
+      #   working-directory: ${{github.workspace}}
+      #   run: npm test
+
+      - name: ESlint analyze json
+        working-directory: ${{github.workspace}}
+        run: npm run lint:eslint:json || echo FAILED
+
+      - name: ESlint analyze html
+        working-directory: ${{github.workspace}}
+        run: npm run lint:eslint || echo FAILED
+
+      - name: Audit dependency
+        working-directory: ${{github.workspace}}
+        run: npm run audit || echo failed
+
+      - name: Convert Audit dependency report
+        working-directory: ${{github.workspace}}
+        run: npm run audit:so
+
+      - name: Archive Analyses reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: AudiSo-Analyses-report
+          path: ${{github.workspace}}/dist/reports
+
+      # - name: Coverage reports
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Coverage-report
+      #     path: ${{github.workspace}}/coverage
+
+      - name: Setup sonarqube
+        if: github.actor != 'dependabot[bot]'
+        uses: warchant/setup-sonar-scanner@v4
+
+      - name: Run SonarQube
+        if: github.actor != 'dependabot[bot]'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: sonar-scanner
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.host.url=https://sonarcloud.io/
+          -Dsonar.verbose=false
+
+      - name: SonarQube Quality Gate check
+        if: github.actor != 'dependabot[bot]'
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  dependabot:
+    needs: [sonarcloud-analyse]
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1.6.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --delete-branch --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

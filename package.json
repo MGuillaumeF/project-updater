@@ -1,0 +1,50 @@
+{
+  "name": "@mguillaumef/project-updater",
+  "version": "0.1.1",
+  "description": "tool to update all project versions",
+  "main": "index.js",
+  "bin": {
+    "project-updater": "dist/bin/project-updater.js"
+  },
+  "scripts": {
+    "audit": "npm audit --json > ./dist/reports/audit-dependency-report.json",
+    "audit:so": "audiso --input-file=./dist/reports/audit-dependency-report.json --output-file ./dist/reports/audit-dependency-report-sonarqube.json",
+    "build": "tsc --project .",
+    "postbuild": "npm uninstall -g . && npm install -g .",
+    "test": "jest test --coverage --silent --verbose",
+    "prettier": "prettier --write . --ignore-path ./.gitignore",
+    "lint:eslint": "eslint . --fix --format html --output-file ./dist/reports/lint/eslint-report.html --ignore-path ./.gitignore",
+    "lint:eslint:json": "eslint . --fix --format json --output-file ./dist/reports/lint/eslint-report.json --ignore-path ./.gitignore"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MGuillaumeF/project-updater.git"
+  },
+  "author": "MGuillaumeF",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MGuillaumeF/project-updater/issues"
+  },
+  "homepage": "https://github.com/MGuillaumeF/project-updater#readme",
+  "devDependencies": {
+    "@mguillaumef/audiso": "^0.0.4",
+    "@tsconfig/recommended": "^1.0.2",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-jest": "^27.0.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-typescript-sort-keys": "^2.1.0",
+    "jest": "^29.0.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
