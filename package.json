@@ -30,7 +30,7 @@
     "@mguillaumef/audiso": "^0.0.4",
     "@tsconfig/recommended": "^1.0.2",
     "@types/jest": "^29.0.0",
-    "@types/node": "^20.3.3",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
     "eslint": "^8.9.0",
